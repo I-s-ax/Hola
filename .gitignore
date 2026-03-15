@@ -78,3 +78,4 @@ agenthub/agents/youtube/db
 
 # Mobile development
 android-sdk/ cloudflare-auth/node_modules/@cloudflare/workerd-linux-arm64/bin/workerd
+cloudflare-auth/node_modules/@cloudflare/workerd-linux-arm64/bin/workerd
