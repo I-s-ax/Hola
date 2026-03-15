@@ -1,0 +1,18 @@
+name = "auth-template"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+JWT_SECRET = "cambia_esto_por_un_secret_seguro_de_64_caracteres_minimo"
+JWT_EXPIRATION_DAYS = "5"
+SENDER_EMAIL = "noreply@updates.isadev.icu"
+
+# Base de datos D1 - Reemplaza TU_DATABASE_ID después de ejecutar: wrangler d1 create auth-db
+[[d1_databases]]
+binding = "DB"
+database_name = "auth-db"
+database_id = "TU_DATABASE_ID_AQUI"
+
+# Para desarrollo local
+# [env.dev]
+# ...
