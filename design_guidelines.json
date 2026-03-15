@@ -1,0 +1,139 @@
+{
+  "project_name": "Auth Template SaaS",
+  "design_identity": {
+    "persona": "E1: The Anti-AI Designer",
+    "core_philosophy": "Fusion over Imitation. Emotion First. Content is King.",
+    "theme_strategy": "The Performance Pro (Dark Mode Variant)",
+    "emotional_tone": "Secure, Precision, Developer-First, 'Clean Code' Aesthetic"
+  },
+  "typography": {
+    "headings": {
+      "family": "Manrope, sans-serif",
+      "weights": ["600", "700", "800"],
+      "tracking": "-0.02em",
+      "usage": "Use for all page titles, section headers, and modal titles. DO NOT use Inter for headings."
+    },
+    "body": {
+      "family": "Inter, sans-serif",
+      "weights": ["400", "500"],
+      "tracking": "normal",
+      "usage": "Use for paragraphs, labels, and form text."
+    },
+    "mono": {
+      "family": "JetBrains Mono, monospace",
+      "weights": ["400", "500"],
+      "usage": "Use for OTP inputs, code snippets, API keys, and sensitive data displays."
+    }
+  },
+  "colors": {
+    "palette": {
+      "background": "#09090B",
+      "foreground": "#FAFAFA",
+      "card": "#18181B",
+      "card_foreground": "#FAFAFA",
+      "popover": "#09090B",
+      "popover_foreground": "#FAFAFA",
+      "primary": "#6366f1",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#27272A",
+      "secondary_foreground": "#FAFAFA",
+      "muted": "#27272A",
+      "muted_foreground": "#A1A1AA",
+      "accent": "#27272A",
+      "accent_foreground": "#FAFAFA",
+      "destructive": "#ef4444",
+      "destructive_foreground": "#FAFAFA",
+      "border": "#27272A",
+      "input": "#27272A",
+      "ring": "#6366f1"
+    },
+    "rules": [
+      "Use #09090B as the global background. NEVER use #000000.",
+      "Use #6366f1 (Electric Indigo) sparsely. Only for the primary CTA and active states.",
+      "Text should be #FAFAFA (off-white) or #A1A1AA (muted grey) for hierarchy.",
+      "Borders must be subtle (#27272A). High contrast borders look cheap."
+    ]
+  },
+  "visual_enhancers": {
+    "surface_strategy": "The 'Tracing Beam' + 'Glassmorphism'",
+    "glass_effect": "bg-zinc-900/60 backdrop-blur-xl border border-white/5",
+    "gradients": {
+      "hero_glow": "radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, rgba(9, 9, 11, 0) 50%)",
+      "subtle_mesh": "Use a dark noise texture overlay with opacity-5 to kill flat colors."
+    },
+    "shadows": {
+      "card": "0 0 0 1px rgba(255,255,255,0.05), 0 4px 6px -1px rgba(0,0,0,0.3)",
+      "glow": "0 0 20px -5px rgba(99, 102, 241, 0.3)"
+    }
+  },
+  "layout_strategy": {
+    "auth_pages": {
+      "structure": "Split Screen (Desktop) / Stacked (Mobile)",
+      "left_panel": "Width 30% (Hidden on mobile). Abstract dark texture background + Quote or Logo.",
+      "right_panel": "Width 70%. Centered content. Max-width 480px form container.",
+      "glass_card": "On mobile/tablet, wrap form in a glass card centered on screen."
+    },
+    "dashboard": {
+      "structure": "Sidebar Layout + Top Header",
+      "sidebar": "Collapsible. Width 64px (collapsed) -> 240px (expanded). Border-r border-zinc-800.",
+      "main_content": "Padding p-8. Max-width 7xl centered.",
+      "grid_system": "Bento Grid (Mode A). Mix of 1x1, 2x1, and 2x2 widgets."
+    }
+  },
+  "components": {
+    "buttons": {
+      "style": "h-10 rounded-lg font-medium transition-all duration-200 active:scale-95",
+      "primary": "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_-3px_rgba(99,102,241,0.4)]",
+      "secondary": "bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-white/5",
+      "ghost": "hover:bg-accent hover:text-accent-foreground"
+    },
+    "inputs": {
+      "style": "h-11 rounded-lg bg-zinc-900/50 border-zinc-800 text-sm placeholder:text-zinc-600 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all",
+      "otp_group": "Gap-2 or Gap-3. Individual slots must be square (w-10 h-10 or w-12 h-12)."
+    },
+    "cards": {
+      "style": "rounded-xl border border-zinc-800 bg-card text-card-foreground shadow-sm hover:border-zinc-700 transition-colors"
+    },
+    "navigation": {
+      "sidebar_item": "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors",
+      "active_item": "bg-accent text-accent-foreground"
+    }
+  },
+  "motion": {
+    "library": "framer-motion",
+    "guidelines": [
+      "No 'transition: all'. Animate specific properties (opacity, transform, color).",
+      "Page Transitions: Simple opacity fade + y-axis slide (y: 10 -> y: 0). Duration: 0.3s.",
+      "Stagger children in lists/grids by 0.05s.",
+      "Buttons: active:scale-95 for tactile feedback."
+    ]
+  },
+  "images": {
+    "auth_background": {
+      "url": "https://images.unsplash.com/photo-1764258559791-06664419fa03?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMGRhcmslMjB0ZWNobm9sb2d5JTIwZ3JhZGllbnQlMjBiYWNrZ3JvdW5kJTIwbWluaW1hbGlzdHxlbnwwfHx8fDE3NzM2MDMzMjh8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Abstract wavy lines dark background",
+      "usage": "Use as the background for the left panel in the auth split layout. Apply 'object-cover' and 'opacity-80'."
+    },
+    "user_avatar": {
+      "url": "https://images.unsplash.com/photo-1637059863061-09735273bf50?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBkZXZlbG9wZXIlMjBwb3J0cmFpdCUyMGRhcmslMjBtb2RlJTIwc3R5bGV8ZW58MHx8fHwxNzczNjAzMzI4fDA&ixlib=rb-4.1.0&q=85",
+      "alt": "User profile avatar",
+      "usage": "Use in the dashboard header/sidebar user profile section."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the 'Dark Mode' theme. No light mode toggle needed (problem statement says 'Debe ser dark mode').",
+    "Implement the 'Sidebar' with a collapse state. Use local storage to persist the state.",
+    "For the 'Code Verification' page, use a proper OTP input component (shadcn/ui InputOTP).",
+    "Ensure 'Resend' timer logic is visible and accessible.",
+    "Session persistence: Ensure the 'Remember Me' or session logic supports the 5-day requirement (mostly backend, but frontend needs to handle the token/cookie persistence logic if applicable).",
+    "Use 'sonner' for all toast notifications (success/error).",
+    "All interactive elements MUST have 'data-testid' attributes (e.g., 'login-submit-btn', 'email-input').",
+    "Do NOT use gradients for text. Keep text solid for maximum readability."
+  ],
+  "universal_guidelines": [
+    "Avoid generic 'AI slop' designs. Be bold with spacing (p-8, p-12).",
+    "Use 'Lucide React' for icons.",
+    "Ensure contrast ratios meet WCAG AA standards.",
+    "Use 'clsx' and 'tailwind-merge' for class manipulation."
+  ]
+}
