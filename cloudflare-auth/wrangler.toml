@@ -3,7 +3,7 @@ main = "src/index.ts"
 compatibility_date = "2024-01-01"
 
 [vars]
-JWT_SECRET = "cambia_esto_por_un_secret_seguro_de_64_caracteres_minimo"
+JWT_SECRET = "00000002000000000000502e66403313c47b53480a6993b0ebfad1ff"
 JWT_EXPIRATION_DAYS = "5"
 SENDER_EMAIL = "noreply@updates.isadev.icu"
 
@@ -11,7 +11,7 @@ SENDER_EMAIL = "noreply@updates.isadev.icu"
 [[d1_databases]]
 binding = "DB"
 database_name = "auth-db"
-database_id = "TU_DATABASE_ID_AQUI"
+database_id = "80619adb-aa1f-413e-ba94-c538c7c167b9"
 
 # Para desarrollo local
 # [env.dev]
