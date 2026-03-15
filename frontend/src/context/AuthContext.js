@@ -28,13 +28,14 @@ export const AuthProvider = ({ children }) => {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
       // Verify token is still valid
-      verifyToken(storedToken);
+      verifyStoredToken(storedToken);
     } else {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const verifyToken = async (tokenToVerify) => {
+  const verifyStoredToken = async (tokenToVerify) => {
     try {
       const response = await axios.get(`${API}/auth/me`, {
         headers: { Authorization: `Bearer ${tokenToVerify}` }
