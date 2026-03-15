@@ -41,8 +41,8 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 
-# Security
-security = HTTPBearer()
+# Security - auto_error=False para devolver 401 en lugar de 403
+security = HTTPBearer(auto_error=False)
 
 # Configure logging
 logging.basicConfig(
@@ -128,6 +128,8 @@ def decode_token(token: str) -> dict:
 
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Get current user from JWT token"""
+    if credentials is None:
+        raise HTTPException(status_code=401, detail="Authentication required")
     token = credentials.credentials
     payload = decode_token(token)
     user = await db.users.find_one({"user_id": payload["user_id"]}, {"_id": 0})
