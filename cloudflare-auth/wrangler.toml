@@ -1,4 +1,4 @@
-name = "auth-template"
+name = "authuser"
 main = "src/index.ts"
 compatibility_date = "2024-01-01"
 
@@ -6,13 +6,15 @@ compatibility_date = "2024-01-01"
 JWT_SECRET = "cambia_esto_por_un_secret_seguro_de_64_caracteres_minimo"
 JWT_EXPIRATION_DAYS = "5"
 SENDER_EMAIL = "noreply@updates.isadev.icu"
+GOOGLE_CLIENT_ID = "127727443159-5298534rjo5f156ud6iedoj1g6n7j6ln.apps.googleusercontent.com"
+FRONTEND_URL = "https://frontend.ipromotor03.workers.dev"
 
-# Base de datos D1 - Reemplaza TU_DATABASE_ID después de ejecutar: wrangler d1 create auth-db
+# Base de datos D1 - Reemplaza con tu database_id
 [[d1_databases]]
 binding = "DB"
 database_name = "auth-db"
-database_id = "TU_DATABASE_ID_AQUI"
+database_id = "80619adb-aa1f-413e-ba94-c538c7c167b9"
 
-# Para desarrollo local
-# [env.dev]
-# ...
+# Secrets (agregar con: wrangler secret put NOMBRE)
+# - RESEND_API_KEY
+# - GOOGLE_CLIENT_SECRET

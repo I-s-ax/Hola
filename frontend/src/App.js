@@ -12,10 +12,13 @@ import VerifyCodePage from "@/pages/VerifyCodePage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import HomePage from "@/pages/HomePage";
+import CardsPage from "@/pages/CardsPage";
+import CardDetailPage from "@/pages/CardDetailPage";
+import GoogleCallbackPage from "@/pages/GoogleCallbackPage";
 import { PlaceholderPage } from "@/pages/PlaceholderPage";
 
 // Icons for placeholder pages
-import { User, FileText, Bell, Settings, HelpCircle } from "lucide-react";
+import { User, Bell, Settings, HelpCircle } from "lucide-react";
 
 function App() {
   return (
@@ -72,18 +75,34 @@ function App() {
               } 
             />
             <Route 
-              path="/profile" 
+              path="/cards" 
               element={
                 <ProtectedRoute>
-                  <PlaceholderPage title="Perfil" icon={User} />
+                  <CardsPage />
                 </ProtectedRoute>
               } 
             />
             <Route 
-              path="/documents" 
+              path="/cards/:cardId" 
               element={
                 <ProtectedRoute>
-                  <PlaceholderPage title="Documentos" icon={FileText} />
+                  <CardDetailPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/auth/google/callback" 
+              element={
+                <ProtectedRoute>
+                  <GoogleCallbackPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <PlaceholderPage title="Perfil" icon={User} />
                 </ProtectedRoute>
               } 
             />

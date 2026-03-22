@@ -12,15 +12,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Shield,
-  FileText,
+  LayoutGrid,
   Bell,
   HelpCircle
 } from 'lucide-react';
 
 const menuItems = [
   { icon: Home, label: 'Inicio', path: '/home' },
+  { icon: LayoutGrid, label: 'Tarjetas', path: '/cards' },
   { icon: User, label: 'Perfil', path: '/profile' },
-  { icon: FileText, label: 'Documentos', path: '/documents' },
   { icon: Bell, label: 'Notificaciones', path: '/notifications' },
   { icon: Settings, label: 'Configuración', path: '/settings' },
   { icon: HelpCircle, label: 'Ayuda', path: '/help' },

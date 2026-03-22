@@ -1,11 +1,13 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { authRoutes } from './routes/auth';
+import { googleRoutes } from './routes/google';
+import { cardsRoutes } from './routes/cards';
 import type { Env } from './types';
 
 const app = new Hono<{ Bindings: Env }>();
 
-// CORS - permite todas las origenes (ajustar en producción)
+// CORS - permite todos los orígenes (ajustar en producción)
 app.use('/*', cors({
   origin: '*',
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -19,6 +21,12 @@ app.get('/api/health', (c) => c.json({ status: 'healthy' }));
 
 // Rutas de autenticación
 app.route('/api/auth', authRoutes);
+
+// Rutas de Google Drive
+app.route('/api/google', googleRoutes);
+
+// Rutas de tarjetas
+app.route('/api/cards', cardsRoutes);
 
 // 404 handler
 app.notFound((c) => c.json({ detail: 'Not found' }, 404));
