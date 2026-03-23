@@ -138,6 +138,10 @@ const CardsPage = () => {
           placeholder="Nombre de la tarjeta"
           className="bg-zinc-900/50 border-zinc-800 text-white"
           required
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck="false"
         />
       </div>
 
@@ -150,18 +154,29 @@ const CardsPage = () => {
           placeholder="Descripción opcional"
           className="bg-zinc-900/50 border-zinc-800 text-white resize-none"
           rows={3}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck="false"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="cover_url" className="text-zinc-300">URL de Portada</Label>
-        <Input
-          id="cover_url"
-          value={formData.cover_url}
-          onChange={(e) => setFormData({ ...formData, cover_url: e.target.value })}
-          placeholder="https://ejemplo.com/imagen.jpg"
-          className="bg-zinc-900/50 border-zinc-800 text-white"
-        />
+        <Label htmlFor="cover_url" className="text-zinc-300">Portada</Label>
+        <div className="space-y-2">
+          <Input
+            id="cover_url"
+            value={formData.cover_url}
+            onChange={(e) => setFormData({ ...formData, cover_url: e.target.value })}
+            placeholder="URL de imagen (opcional)"
+            className="bg-zinc-900/50 border-zinc-800 text-white"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+          />
+          <p className="text-xs text-zinc-500">O deja vacío para tarjeta sin portada</p>
+        </div>
         {formData.cover_url && (
           <img 
             src={formData.cover_url} 
@@ -223,7 +238,10 @@ const CardsPage = () => {
                 Nueva Tarjeta
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-[#18181B] border-zinc-800">
+            <DialogContent 
+              className="bg-[#18181B] border-zinc-800 max-h-[90vh] overflow-y-auto"
+              onOpenAutoFocus={(e) => e.preventDefault()}
+            >
               <DialogHeader>
                 <DialogTitle className="text-white">Crear Nueva Tarjeta</DialogTitle>
               </DialogHeader>
@@ -364,7 +382,10 @@ const CardsPage = () => {
 
         {/* Edit Dialog */}
         <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-          <DialogContent className="bg-[#18181B] border-zinc-800">
+          <DialogContent 
+            className="bg-[#18181B] border-zinc-800 max-h-[90vh] overflow-y-auto"
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
             <DialogHeader>
               <DialogTitle className="text-white">Editar Tarjeta</DialogTitle>
             </DialogHeader>
