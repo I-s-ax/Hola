@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { DashboardLayout } from '../components/DashboardLayout';
@@ -10,7 +10,7 @@ import { Label } from '../components/ui/label';
 import { Switch } from '../components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
 import { toast } from 'sonner';
-import { Plus, Image, Loader2, ChevronLeft, ChevronRight, Globe, Lock, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Image, Loader2, ChevronLeft, ChevronRight, Globe, Lock, Pencil, Trash2, Upload, X } from 'lucide-react';
 import axios from 'axios';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -28,10 +28,11 @@ const CardsPage = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    cover_url: '',
+    cover_data: '',
     is_public: false
   });
   const [submitting, setSubmitting] = useState(false);
+  const fileInputRef = useRef(null);
 
   const fetchCards = useCallback(async () => {
     if (!user) return;
@@ -59,6 +60,36 @@ const CardsPage = () => {
     fetchCards();
   }, [fetchCards]);
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 500000) {
+      toast.error('La imagen debe ser menor a 500KB');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData(prev => ({ ...prev, cover_data: reader.result }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeCover = () => {
+    setFormData(prev => ({ ...prev, cover_data: '' }));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({ title: '', description: '', cover_data: '', is_public: false });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleCreate = async (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
@@ -70,13 +101,17 @@ const CardsPage = () => {
     try {
       await axios.post(`${API}/cards`, {
         user_id: user.user_id,
-        ...formData
+        title: formData.title,
+        description: formData.description || null,
+        cover_data: formData.cover_data || null,
+        is_public: formData.is_public
       });
       toast.success('Tarjeta creada exitosamente');
       setIsCreateOpen(false);
-      setFormData({ title: '', description: '', cover_url: '', is_public: false });
+      resetForm();
       fetchCards();
     } catch (error) {
+      console.error('Create error:', error);
       toast.error('Error al crear la tarjeta');
     } finally {
       setSubmitting(false);
@@ -91,11 +126,15 @@ const CardsPage = () => {
     try {
       await axios.put(`${API}/cards/${editingCard.card_id}`, {
         user_id: user.user_id,
-        ...formData
+        title: formData.title,
+        description: formData.description || null,
+        cover_data: formData.cover_data || null,
+        is_public: formData.is_public
       });
       toast.success('Tarjeta actualizada');
       setIsEditOpen(false);
       setEditingCard(null);
+      resetForm();
       fetchCards();
     } catch (error) {
       toast.error('Error al actualizar la tarjeta');
@@ -119,86 +158,91 @@ const CardsPage = () => {
   const openEditDialog = (card) => {
     setEditingCard(card);
     setFormData({
-      title: card.title,
+      title: card.title || '',
       description: card.description || '',
-      cover_url: card.cover_url || '',
+      cover_data: card.cover_data || '',
       is_public: card.is_public === 1
     });
     setIsEditOpen(true);
   };
 
+  const openCreateDialog = () => {
+    resetForm();
+    setIsCreateOpen(true);
+  };
+
   const CardForm = ({ onSubmit, isEdit = false }) => (
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="title" className="text-zinc-300">Título *</Label>
+        <Label className="text-zinc-300">Título *</Label>
         <Input
-          id="title"
+          type="text"
           value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
           placeholder="Nombre de la tarjeta"
           className="bg-zinc-900/50 border-zinc-800 text-white"
           required
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description" className="text-zinc-300">Descripción</Label>
+        <Label className="text-zinc-300">Descripción</Label>
         <Textarea
-          id="description"
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
           placeholder="Descripción opcional"
           className="bg-zinc-900/50 border-zinc-800 text-white resize-none"
           rows={3}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="cover_url" className="text-zinc-300">Portada</Label>
-        <div className="space-y-2">
-          <Input
-            id="cover_url"
-            value={formData.cover_url}
-            onChange={(e) => setFormData({ ...formData, cover_url: e.target.value })}
-            placeholder="URL de imagen (opcional)"
-            className="bg-zinc-900/50 border-zinc-800 text-white"
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-          />
-          <p className="text-xs text-zinc-500">O deja vacío para tarjeta sin portada</p>
-        </div>
-        {formData.cover_url && (
-          <img 
-            src={formData.cover_url} 
-            alt="Preview" 
-            className="mt-2 w-full h-32 object-cover rounded-lg"
-            onError={(e) => e.target.style.display = 'none'}
-          />
+        <Label className="text-zinc-300">Portada</Label>
+        {formData.cover_data ? (
+          <div className="relative">
+            <img 
+              src={formData.cover_data} 
+              alt="Portada" 
+              className="w-full h-40 object-cover rounded-lg"
+            />
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              onClick={removeCover}
+              className="absolute top-2 right-2"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+        ) : (
+          <div 
+            onClick={() => fileInputRef.current?.click()}
+            className="border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center cursor-pointer hover:border-zinc-600 transition-colors"
+          >
+            <Upload className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
+            <p className="text-zinc-400 text-sm">Clic para subir imagen</p>
+            <p className="text-zinc-500 text-xs mt-1">Máximo 500KB</p>
+          </div>
         )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          className="hidden"
+        />
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Switch
-            id="is_public"
-            checked={formData.is_public}
-            onCheckedChange={(checked) => setFormData({ ...formData, is_public: checked })}
-          />
-          <Label htmlFor="is_public" className="text-zinc-300 flex items-center gap-2">
-            {formData.is_public ? <Globe className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
-            {formData.is_public ? 'Pública' : 'Privada'}
-          </Label>
-        </div>
+      <div className="flex items-center justify-between py-2">
+        <Label className="text-zinc-300 flex items-center gap-2">
+          {formData.is_public ? <Globe className="w-4 h-4 text-green-400" /> : <Lock className="w-4 h-4 text-zinc-400" />}
+          {formData.is_public ? 'Tarjeta Pública' : 'Tarjeta Privada'}
+        </Label>
+        <Switch
+          checked={formData.is_public}
+          onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_public: checked }))}
+        />
       </div>
 
       <Button
@@ -225,29 +269,17 @@ const CardsPage = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-white">Mis Tarjetas</h1>
-            <p className="text-zinc-400">Organiza tu contenido multimedia</p>
+            <p className="text-zinc-400">Organiza tu contenido</p>
           </div>
           
-          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-            <DialogTrigger asChild>
-              <Button 
-                className="bg-primary text-white hover:bg-primary/90"
-                data-testid="create-card-btn"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Nueva Tarjeta
-              </Button>
-            </DialogTrigger>
-            <DialogContent 
-              className="bg-[#18181B] border-zinc-800 max-h-[90vh] overflow-y-auto"
-              onOpenAutoFocus={(e) => e.preventDefault()}
-            >
-              <DialogHeader>
-                <DialogTitle className="text-white">Crear Nueva Tarjeta</DialogTitle>
-              </DialogHeader>
-              <CardForm onSubmit={handleCreate} />
-            </DialogContent>
-          </Dialog>
+          <Button 
+            onClick={openCreateDialog}
+            className="bg-primary text-white hover:bg-primary/90"
+            data-testid="create-card-btn"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Nueva Tarjeta
+          </Button>
         </div>
 
         {/* Cards Grid */}
@@ -262,7 +294,7 @@ const CardsPage = () => {
               <h3 className="text-lg font-semibold text-white mb-2">No hay tarjetas</h3>
               <p className="text-zinc-400 mb-4">Crea tu primera tarjeta para comenzar</p>
               <Button
-                onClick={() => setIsCreateOpen(true)}
+                onClick={openCreateDialog}
                 className="bg-primary text-white hover:bg-primary/90"
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -279,14 +311,11 @@ const CardsPage = () => {
                   className="bg-[#18181B] border-zinc-800 hover:border-zinc-700 transition-all cursor-pointer group overflow-hidden"
                   data-testid={`card-${card.card_id}`}
                 >
-                  <div 
-                    onClick={() => navigate(`/cards/${card.card_id}`)}
-                    className="relative"
-                  >
-                    {card.cover_url ? (
+                  <div className="relative">
+                    {card.cover_data ? (
                       <div className="aspect-video w-full overflow-hidden">
                         <img 
-                          src={card.cover_url} 
+                          src={card.cover_data} 
                           alt={card.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -297,7 +326,6 @@ const CardsPage = () => {
                       </div>
                     )}
                     
-                    {/* Badge público/privado */}
                     <div className="absolute top-2 right-2">
                       <span className={`px-2 py-1 rounded-full text-xs flex items-center gap-1 ${
                         card.is_public 
@@ -312,7 +340,7 @@ const CardsPage = () => {
                   
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0" onClick={() => navigate(`/cards/${card.card_id}`)}>
+                      <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-white truncate">{card.title}</h3>
                         {card.description && (
                           <p className="text-sm text-zinc-400 mt-1 line-clamp-2">{card.description}</p>
@@ -327,7 +355,7 @@ const CardsPage = () => {
                             e.stopPropagation();
                             openEditDialog(card);
                           }}
-                          className="text-zinc-400 hover:text-white"
+                          className="text-zinc-400 hover:text-white h-8 w-8 p-0"
                           data-testid={`edit-card-${card.card_id}`}
                         >
                           <Pencil className="w-4 h-4" />
@@ -339,7 +367,7 @@ const CardsPage = () => {
                             e.stopPropagation();
                             handleDelete(card.card_id);
                           }}
-                          className="text-zinc-400 hover:text-red-400"
+                          className="text-zinc-400 hover:text-red-400 h-8 w-8 p-0"
                           data-testid={`delete-card-${card.card_id}`}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -380,11 +408,26 @@ const CardsPage = () => {
           </>
         )}
 
+        {/* Create Dialog */}
+        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+          <DialogContent 
+            className="bg-[#18181B] border-zinc-800 max-h-[90vh] overflow-y-auto"
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            onPointerDownOutside={(e) => e.preventDefault()}
+          >
+            <DialogHeader>
+              <DialogTitle className="text-white">Crear Nueva Tarjeta</DialogTitle>
+            </DialogHeader>
+            <CardForm onSubmit={handleCreate} />
+          </DialogContent>
+        </Dialog>
+
         {/* Edit Dialog */}
         <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
           <DialogContent 
             className="bg-[#18181B] border-zinc-800 max-h-[90vh] overflow-y-auto"
             onOpenAutoFocus={(e) => e.preventDefault()}
+            onPointerDownOutside={(e) => e.preventDefault()}
           >
             <DialogHeader>
               <DialogTitle className="text-white">Editar Tarjeta</DialogTitle>

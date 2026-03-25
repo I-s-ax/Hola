@@ -1,13 +1,12 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { authRoutes } from './routes/auth';
-import { googleRoutes } from './routes/google';
 import { cardsRoutes } from './routes/cards';
 import type { Env } from './types';
 
 const app = new Hono<{ Bindings: Env }>();
 
-// CORS - permite todos los orígenes (ajustar en producción)
+// CORS
 app.use('/*', cors({
   origin: '*',
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -16,16 +15,11 @@ app.use('/*', cors({
 }));
 
 // Health check
-app.get('/api', (c) => c.json({ message: 'Auth Template API - Cloudflare Workers' }));
+app.get('/api', (c) => c.json({ message: 'Auth Template API v2' }));
 app.get('/api/health', (c) => c.json({ status: 'healthy' }));
 
-// Rutas de autenticación
+// Rutas
 app.route('/api/auth', authRoutes);
-
-// Rutas de Google Drive
-app.route('/api/google', googleRoutes);
-
-// Rutas de tarjetas
 app.route('/api/cards', cardsRoutes);
 
 // 404 handler

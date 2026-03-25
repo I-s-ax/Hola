@@ -13,8 +13,6 @@ import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import HomePage from "@/pages/HomePage";
 import CardsPage from "@/pages/CardsPage";
-import CardDetailPage from "@/pages/CardDetailPage";
-import GoogleCallbackPage from "@/pages/GoogleCallbackPage";
 import { PlaceholderPage } from "@/pages/PlaceholderPage";
 
 // Icons for placeholder pages
@@ -79,22 +77,6 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CardsPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/cards/:cardId" 
-              element={
-                <ProtectedRoute>
-                  <CardDetailPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/auth/google/callback" 
-              element={
-                <ProtectedRoute>
-                  <GoogleCallbackPage />
                 </ProtectedRoute>
               } 
             />
